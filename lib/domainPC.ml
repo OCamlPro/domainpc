@@ -5,6 +5,8 @@ module IntMap = Map.Make (Int)
 
 let cores_condition = Condition.create ()
 let cores_mutex = Mutex.create ()
+let crash = Atomic.make false
+let set_crash_on_unavailable () = Atomic.set crash true
 
 (** List of sets of cpus, where each distinct set of CPUs is linked to a unique
     core. *)
@@ -27,13 +29,16 @@ let cpus_per_core =
       List.iter (fun (_, cpus) -> Queue.add cpus queue) tl;
       queue
 
-(* fetches a set of cpus, waits for a set to be freed if all sets are used by
-   other domains *)
+(** fetches a set of cpus, if all sets of cpus are used by other domains, either
+    waits for a set to be freed or crashes if [set_crash_on_unavailable ()] was
+    called. *)
 let get_cpus () =
   let rec aux () =
-    if Queue.is_empty cpus_per_core then (
-      Condition.wait cores_condition cores_mutex;
-      aux ())
+    if Queue.is_empty cpus_per_core then
+      if Atomic.get crash then failwith "No free cores"
+      else (
+        Condition.wait cores_condition cores_mutex;
+        aux ())
     else
       let cpus = Queue.pop cpus_per_core in
       Mutex.unlock cores_mutex;
