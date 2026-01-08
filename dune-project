@@ -1,5 +1,5 @@
 (lang dune 3.20)
-(name domainPC)
+(name domainpc)
 (version dev)
 
 (generate_opam_files true)
@@ -16,7 +16,7 @@
 (documentation https://url/to/documentation)
 
 (package
- (name domainPC)
+ (name domainpc)
  (synopsis "A short synopsis")
  (description "A longer description")
  (depends ocaml processor)

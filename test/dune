@@ -1,6 +1,6 @@
 (executable
  (name test)
- (libraries domainPC unix))
+ (libraries domainpc unix))
 
 (rule
  (with-stderr-to

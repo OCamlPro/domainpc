@@ -8,9 +8,9 @@ let stress () =
   done
 
 let () =
-  let d1 = DomainPC.spawn (fun _ -> stress ()) in
-  let d2 = DomainPC.spawn (fun _ -> stress ()) in
-  let d3 = DomainPC.spawn (fun _ -> stress ()) in
-  let d4 = DomainPC.spawn (fun _ -> stress ()) in
+  let d1 = Domainpc.spawn (fun _ -> stress ()) in
+  let d2 = Domainpc.spawn (fun _ -> stress ()) in
+  let d3 = Domainpc.spawn (fun _ -> stress ()) in
+  let d4 = Domainpc.spawn (fun _ -> stress ()) in
   stress ();
-  List.iter DomainPC.join [ d1; d2; d3; d4 ]
+  List.iter Domainpc.join [ d1; d2; d3; d4 ]

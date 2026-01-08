@@ -1,4 +1,4 @@
 (library
- (public_name domainPC)
- (modules domainPC)
+ (public_name domainpc)
+ (modules domainpc)
  (libraries processor))
