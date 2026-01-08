@@ -5,8 +5,8 @@ module IntMap = Map.Make (Int)
 
 let cores_condition = Condition.create ()
 let cores_mutex = Mutex.create ()
-let crash = Atomic.make false
-let set_crash_on_unavailable () = Atomic.set crash true
+let crash = Atomic.make true
+let wait_on_unavailable () = Atomic.set crash false
 
 (** List of sets of cpus, where each distinct set of CPUs is linked to a unique
     core. *)

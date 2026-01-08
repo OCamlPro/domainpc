@@ -2,6 +2,6 @@
 
 include module type of Domain
 
-val set_crash_on_unavailable : unit -> unit
-(** When all cores are used, crash instead of waiting for one of them to be
-    freed *)
+val wait_on_unavailable : unit -> unit
+(** When all cores are used, wait for one of them to be freed instead of
+    crashing. *)
