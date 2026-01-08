@@ -8,6 +8,7 @@ let stress () =
   done
 
 let () =
+  Domainpc.wait_on_unavailable ();
   let d1 = Domainpc.spawn (fun _ -> stress ()) in
   let d2 = Domainpc.spawn (fun _ -> stress ()) in
   let d3 = Domainpc.spawn (fun _ -> stress ()) in
