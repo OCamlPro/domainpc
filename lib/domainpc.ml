@@ -41,19 +41,15 @@ let get_cpus () =
         aux ())
     else
       let cpus = Queue.pop cpus_per_core in
-      Mutex.unlock cores_mutex;
       cpus
   in
-  Mutex.lock cores_mutex;
-  aux ()
+  Mutex.protect cores_mutex aux
 
 (** When a domain is **properly** stopped (i.e. its `at_exit`) function
     executes, release the core (set of cpus) it uses, and signals to any waiting
     domain that a core has been free (and there are cpus that can be used). *)
 let free_cpus cpus =
-  Mutex.lock cores_mutex;
-  Queue.push cpus cpus_per_core;
-  Mutex.unlock cores_mutex;
+  Mutex.protect cores_mutex (fun () -> Queue.push cpus cpus_per_core);
   Condition.signal cores_condition
 
 let spawn f =
