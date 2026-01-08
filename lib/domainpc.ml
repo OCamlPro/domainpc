@@ -52,9 +52,32 @@ let free_cpus cpus =
   Mutex.protect cores_mutex (fun () -> Queue.push cpus cpus_per_core);
   Condition.signal cores_condition
 
+let spawn_aux f cpus =
+  Processor.Affinity.set_ids cpus;
+  Domain.at_exit (fun () -> free_cpus cpus);
+  f ()
+
 let spawn f =
   spawn (fun () ->
       let cpus = get_cpus () in
-      Processor.Affinity.set_ids cpus;
-      Domain.at_exit (fun () -> free_cpus cpus);
-      f ())
+      spawn_aux f cpus)
+
+let spawn_n ?n f =
+  let cpul =
+    Mutex.protect cores_mutex (fun () ->
+        let ncores = Queue.length cpus_per_core in
+        match n with
+        | None ->
+            if ncores > 0 then
+              List.init ncores (fun _ -> Queue.pop cpus_per_core)
+            else failwith "spawn_n: no free cores"
+        | Some n ->
+            if n <= ncores then List.init n (fun _ -> Queue.pop cpus_per_core)
+            else
+              failwith
+                (Format.sprintf
+                   "spawn_n: requested %d cores, but only %n are available" n
+                   ncores))
+  in
+  Array.of_list
+    (List.map (fun cpus -> Domain.spawn (fun () -> spawn_aux f cpus)) cpul)
