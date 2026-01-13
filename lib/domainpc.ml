@@ -59,7 +59,7 @@ let spawn f =
       let cpus = get_cpus () in
       spawn_aux f cpus)
 
-let spawn_n ?n f =
+let spawn_n ?n ~before_spawn f =
   let cpul =
     Mutex.protect cores_mutex (fun () ->
         let ncores = Queue.length cpus_per_core in
@@ -77,4 +77,8 @@ let spawn_n ?n f =
                    ncores))
   in
   Array.of_list
-    (List.map (fun cpus -> Domain.spawn (fun () -> spawn_aux f cpus)) cpul)
+    (List.map
+       (fun cpus ->
+         before_spawn ();
+         Domain.spawn (fun () -> spawn_aux f cpus))
+       cpul)
