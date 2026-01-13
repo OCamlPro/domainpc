@@ -22,11 +22,8 @@ let cpus_per_core =
   in
   match IntMap.to_list m with
   | [] -> failwith "unexpected: no CPUS/Cores found"
-  | (_, cpus) :: tl ->
-      (* set the cpus on which the parent thread can run, the other cpus
-         are put in a queue to be used by child domains. *)
-      Processor.Affinity.set_ids cpus;
-      List.iter (fun (_, cpus) -> Queue.add cpus queue) tl;
+  | l ->
+      List.iter (fun (_, cpus) -> Queue.add cpus queue) l;
       queue
 
 (** fetches a set of cpus, if all sets of cpus are used by other domains, either
@@ -62,7 +59,7 @@ let spawn f =
       let cpus = get_cpus () in
       spawn_aux f cpus)
 
-let spawn_n ?n f =
+let spawn_n ?n ~before_spawn f =
   let cpul =
     Mutex.protect cores_mutex (fun () ->
         let ncores = Queue.length cpus_per_core in
@@ -80,4 +77,8 @@ let spawn_n ?n f =
                    ncores))
   in
   Array.of_list
-    (List.map (fun cpus -> Domain.spawn (fun () -> spawn_aux f cpus)) cpul)
+    (List.map
+       (fun cpus ->
+         before_spawn ();
+         Domain.spawn (fun () -> spawn_aux f cpus))
+       cpul)
