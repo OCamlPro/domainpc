@@ -11,6 +11,8 @@ let wait_on_unavailable () = Atomic.set crash false
     core. *)
 let cpus_per_core = Queue.create ()
 
+let get_available_cores () = Queue.length cpus_per_core
+
 (** Whether or not the queue of cpus_per_core was initialized. *)
 let initialized = ref false
 
@@ -140,6 +142,7 @@ module Domain = struct
   include Domain
 
   let wait_on_unavailable = wait_on_unavailable
+  let get_available_cores = get_available_cores
   let isolate_current = isolate_current
   let spawn = spawn'
   let spawn_n = spawn_n

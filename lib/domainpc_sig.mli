@@ -4,6 +4,9 @@ val wait_on_unavailable : unit -> unit
 (** [wait_on_unavailable ()] when all cores are used and more are requested,
     wait for cores to be freed instead of crashing. *)
 
+val get_available_cores : unit -> int
+(** [get_available_cores ()] returns the number of available cores. *)
+
 val isolate_current : unit -> unit
 (** [isolate_current ()] ensures that the current domain (usually the main one)
     is restricted to run on a core where other isolated domains can't run. *)
