@@ -1,6 +1,6 @@
 (lang dune 3.20)
 (name domainpc)
-(version dev)
+(version 0.1)
 
 (generate_opam_files true)
 
