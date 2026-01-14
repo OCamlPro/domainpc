@@ -7,18 +7,16 @@
 (license AGPL-3.0-or-later)
 
 (source
- (github hra687261/domainpc))
+ (github ocamlpro/domainpc))
 
-(authors "<hra@ocamlpro.com>")
+(authors "Hichem Rami Ait El Hara <hra@ocamlpro.com>")
 
-(maintainers "<hra@ocamlpro.com>")
+(maintainers "Hichem Rami Ait El Hara <hra@ocamlpro.com>")
 
 (package
  (name domainpc)
- (synopsis "domainpc")
- (description "Domain Per Core, ensure that each domain runs on its own physical core.")
- (depends ocaml processor)
- (tags
-  ("add topics" "to describe" your project)))
+ (synopsis "Domainpc")
+ (description "Domain Per Core, spawn domains ensuring that they run on separate cores.")
+ (depends ocaml processor))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html
