@@ -1,4 +1,5 @@
 (library
  (public_name domainpc)
- (modules domainpc)
+ (modules domainpc domainpc_sig)
+ (modules_without_implementation domainpc_sig)
  (libraries processor))

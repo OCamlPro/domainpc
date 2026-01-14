@@ -133,3 +133,14 @@ let spawn_n ?(isolated = true) ?n f =
       else
         Array.of_list
           (List.init Processor.Query.core_count (fun _ -> Domain.spawn f))
+
+module Domain = struct
+  let spawn' = spawn
+
+  include Domain
+
+  let wait_on_unavailable = wait_on_unavailable
+  let isolate_current = isolate_current
+  let spawn = spawn'
+  let spawn_n = spawn_n
+end
