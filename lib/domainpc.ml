@@ -15,7 +15,8 @@ let cpus_per_core = Queue.create ()
 let initialized = ref false
 
 let get_available_cores () =
-  if !initialized then Queue.length cpus_per_core else Processor.Query.cpu_count
+  if !initialized then Queue.length cpus_per_core
+  else Processor.Query.core_count
 
 (** The mode in which the library is used. It is dermined from the first call to
     `spawn` or `spawn_n` *)
