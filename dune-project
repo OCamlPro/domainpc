@@ -15,8 +15,8 @@
 
 (package
  (name domainpc)
- (synopsis "Domain Per Core, spawn domains ensuring that they run on separate cores.")
- (description "Domain Per Core, spawn domains ensuring that they run on separate cores.")
+ (synopsis "Domain Per Core, spawn domains ensuring that they run on separate cores")
+ (description "Domain Per Core, spawn domains ensuring that they run on separate cores")
  (depends (ocaml (>= 5.2)) processor))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html
